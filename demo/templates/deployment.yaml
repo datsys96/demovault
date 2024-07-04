@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+spec:
+  replicas: {{ .Values.replica }}
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+    spec:
+      containers:
+      - name: {{ .Values.name }}
+        image: {{ .Values.image }}
+        # env:
+        # - name: USER
+        #   value: <path:kv-v2/data/argocd#user>
+        # - name: PASSWORD
+        #   value: <path:kv-v2/data/argocd#password>
+        env:
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.name }}
+              key: TOKEN        
+        command: ["sh","-c","echo user=$(USER) password=$(PASSWORD);sleep 365d"]

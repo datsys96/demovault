@@ -1,0 +1,3 @@
+name: sec-as-env
+replica: 2
+image: busybox
